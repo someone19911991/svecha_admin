@@ -1,0 +1,13 @@
+.title{
+    margin-top: 100px;
+    text-align: center;
+    font-size: 30px;
+}
+.create_btn{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    top: 40px;
+    right: 10px;
+}

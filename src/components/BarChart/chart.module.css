@@ -1,0 +1,31 @@
+.months{
+    display: flex;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 5px;
+}
+
+.months button{
+    background-color: #999;
+    outline: 0;
+    border: 0;
+    border-radius: 2px;
+    padding: 3px 10px;
+    color: white;
+}
+.active_month{
+    color: var(--red)
+}
+
+.months .data_type_btn{
+    background-color: teal;
+    color: white;
+    font-size: 18px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.months .data_type_btn:hover{
+    color: teal;
+    background-color: #fff;
+}

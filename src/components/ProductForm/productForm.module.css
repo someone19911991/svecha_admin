@@ -1,0 +1,194 @@
+.pf_form{
+    background: -webkit-linear-gradient(90deg,#1b3666,#1f6394); /* Chrome 10-25, Safari 5.1-6 */ background: linear-gradient(90deg,#1b3666,#1f6394); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    width: 900px;
+    padding: 20px;
+    height: 500px;
+    overflow: scroll;
+}
+.pf_form label{
+    color: var(--productform-label-color);
+    font-size: var(--productform-label-font-size);
+    margin-bottom: 15px;
+    display: inline-block;
+    font-weight: 900;
+}
+.pf_form input, .pf_form select{
+    width: 100%;
+    padding: 10px;
+}
+.pf_error{
+    color: var(--error-color);
+    height: 25px;
+    line-height: 25px;
+    font-size: 12px;
+}
+.submit_btn{
+    margin-top: 25px;
+}
+.refItem, .oemItem{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+.add_oem_input_container{
+    margin-bottom: 5px;
+}
+
+.add_oem_input_container div{
+    display: flex;
+    gap: 20px;
+}
+.add_oem_input_container div input{
+    flex: 1;
+}
+.add_oem_btn_container button{
+    margin-bottom: 15px;
+}
+.img_field{
+    display: flex;
+    gap: 20px;
+}
+.img_field img{
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border: 0 !important;
+    outline: 0 !important;
+    background: -webkit-linear-gradient(90deg,#1b3666,#1f6394); /* Chrome 10-25, Safari 5.1-6 */ background: linear-gradient(90deg,#1b3666,#1f6394); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */;
+}
+.img_field label{
+    color: grey;
+    cursor: pointer;
+    margin-top: 0;
+}
+.img_field input[type=file]{
+    display: none
+}
+.img_field input[type=radio]{
+    width: initial;
+    height: initial;
+   align-self: start;
+    /*margin-top: 5px;*/
+}
+.btn_remove_img{
+    align-self: start;
+    cursor: pointer;
+    color: var(--error-color);
+    font-size: 25px;
+    background-color: transparent;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    outline: 0;
+    border: 0;
+}
+
+.btn_remove_img:hover{
+    opacity: 0.7
+}
+
+.img_container{
+   position: relative;
+    height: 32px;
+    width: 32px;
+}
+
+.img_container span{
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: var(--error-color);
+    font-size: 25px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.img_container:hover span{
+    display: flex;
+}
+
+.master_box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.master_box input[type=radio]{
+    width: max-content;
+    margin-top: 10px;
+}
+.master_img{
+
+}
+.master_img p{
+    font-weight: bold;
+    font-size: var(--productform-label-font-size);
+    color: var(--productform-label-color);
+    margin-top: -33px;
+    margin-bottom: 15px;
+}
+
+.ref_oem_row{
+    display: flex;
+    gap: 10px;
+}
+.ref_oem_row button{
+    background-color: var(--orange);
+    color: white;
+    padding: 7px 15px;
+    outline: 0;
+    border: 1px solid white;
+    border-radius: 5px;
+    align-self: start;
+    cursor: pointer
+}
+.ref_oem_row button:hover{
+    opacity: 0.7;
+}
+.ref_oem_row button:nth-of-type(1){
+    background-color: green;
+}
+.ref_oem_field{
+    flex: 1
+}
+.refs_oems_container{
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.refs_oems_list{
+    background-color: #fff;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    position: relative;
+}
+.oem_ref_title{
+    color: red;
+    font-size: 18px;
+    font-weight: bold;
+}
+.oem_ref_value{
+    background-color: lightgrey;
+    border-bottom: 5px solid white;
+    padding: 3px;
+}
+.to_be_deleted{
+    background-color: lightblue !important;
+}
+.oem_ref_btn{
+    margin-bottom: 25px;
+}
+.refs_oems_actions{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.refs_oems_actions button{
+
+}

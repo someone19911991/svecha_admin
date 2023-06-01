@@ -1,0 +1,25 @@
+.leftbar_container{
+    background-color: var(--header-blue);
+    min-height: calc(100vh - 60px)
+}
+.leftbar_menu li{
+    border-top: 1px solid var(--grey);
+}
+.leftbar_menu li a{
+    font-size: 13px;
+    color: white;
+    display: block;
+    padding: 10px;
+}
+.leftbar_menu li:hover{
+    background-color: #E94C3D;
+}
+
+.trash{
+    border: 0 !important;
+    outline: 0;
+    margin-top: 100px;
+    margin-bottom: 20px;
+    color: #fff;
+    text-align: center;
+}

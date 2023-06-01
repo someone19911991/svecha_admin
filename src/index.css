@@ -1,13 +1,87 @@
-body {
+:root{
+  --red: #c2121e;
+  --error-color: #ec1a3a;
+  /*--error-color: #ff8fa0;*/
+  --success-color: #14C314;
+  --warning-color: #E2A533;
+  --dark-blue: #05122D;
+  --header-blue: #2A3B4C;
+  --grey: #231f1f;
+  --box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3), -2px -2px 3px rgba(0, 0, 0, 0.3);
+  --productform-label-color: #E94C3D;
+  --productform-label-font-size: 15px;
+  --orange: #DF7920
+}
+*{
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+  font-family: 'Roboto Mono', monospace;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+ul, li{
+  list-style-type: none;
+}
+a{
+  text-decoration: none;
+}
+
+.btn, .btn_wh{
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: white;
+  box-shadow: var(--box-shadow);
+  color: var(--grey);
+  border: 1px solid transparent;
+  margin: 5px 0;
+}
+
+.btn_wh:hover{
+  border: 1px solid;
+}
+
+.btn:hover{
+  -webkit-transform: scale(1.1); /* Chrome, Safari, Opera */
+  transform: scale(1.1);
+  transition: 0.1s all;
+}
+
+.main_container{
+  display: flex;
+}
+
+.main{
+  flex: 1;
+}
+
+.active{
+  background-color: #E94C3D;
+}
+
+.disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  /*box-shadow: inset 0 0 5px grey;*/
+  /*border-radius: 10px;*/
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--dark-blue);
+  /*border-radius: 10px;*/
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b30000;
 }

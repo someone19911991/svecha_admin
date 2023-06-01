@@ -1,0 +1,42 @@
+.table, .submit_container{
+    width: calc(100vw - 250px);
+    font-size: 17px;
+}
+td{
+    text-align: center;
+    white-space: nowrap;
+}
+td.message{
+    white-space: break-spaces;
+}
+.submit_container{
+    display: flex;
+    justify-content: flex-end;
+    margin-left: 10px;
+}
+.submit_container button{
+    background-color: #367B5B;
+    font-size: 17px;
+    color: white;
+    outline: 0;
+    border: 2px solid #367B5B;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.submit_container button:hover{
+    background-color: #fff;
+    color: #367B5B
+}
+
+.disabled_btn{
+    opacity: 0.6;
+    cursor: not-allowed !important;
+}
+.disabled_btn:hover{
+    background-color: #367B5B !important;
+    color: #fff !important;
+}
+.empty_title{
+    text-align: center;
+}
