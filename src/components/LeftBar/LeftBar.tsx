@@ -14,6 +14,7 @@ const LeftBar = () => {
                 <li><NavLink to="/products/airbag_cables">Airbag Cables</NavLink></li>
                 <li><NavLink to="/products/crankshaft_sensors">Crankshaft Sensors</NavLink></li>
                 <li><NavLink to="/products/camshaft_sensors">Camshaft Sensors</NavLink></li>
+                <li><NavLink to="/models">Models</NavLink></li>
 
                 <li className={styles.trash}>Trash <FaTrashAlt /></li>
                 <li><NavLink to="/notifications_history">Notifications History</NavLink></li>

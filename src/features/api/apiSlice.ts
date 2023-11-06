@@ -9,7 +9,8 @@ import { setCredentialsAction, logoutAction } from '../auth/authSlice'
 import { IAuth } from '../../interfaces'
 import { RootState } from '../../store/store'
 
-const baseUrl = 'http://localhost:5000/api'
+// const baseUrl = 'http://localhost:5000/api'
+const baseUrl = 'https://www.back.svecha.am/api'
 
 const baseQuery = fetchBaseQuery({
     baseUrl,
@@ -45,6 +46,6 @@ const apiSlice_ = createApi({
     endpoints: () => ({})
 })
 
-const apiSlice = apiSlice_.enhanceEndpoints({addTagTypes: ["Product", "Order"]})
+const apiSlice = apiSlice_.enhanceEndpoints({addTagTypes: ["Product", "Order", "Model"]})
 
 export default apiSlice

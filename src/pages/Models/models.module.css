@@ -1,0 +1,181 @@
+.container{
+    background-color: #ccc;
+    /*display: flex;*/
+    /*justify-content: center;*/
+}
+
+.form{
+    padding: 10px;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input_container{
+
+}
+
+.input_field{
+    padding: 5px;
+    font-size: 20px;
+    border: 0;
+    outline: 0;
+    border-radius: 5px;
+    /*margin: 10px 0;*/
+    width: 100%;
+}
+
+.input_label{
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: #2A3B4C;
+    border-radius: 5px;
+    border: 2px solid  #2A3B4C;
+    transition: 0.3s all linear;
+    cursor: pointer;
+}
+
+.input_label:hover{
+    border-color: #2A3B4C;
+    background-color: #fff;
+}
+
+.input_label:hover .file_upload_icon{
+    color: #2A3B4C;
+}
+
+.file_upload_icon{
+    transition: 0.3s all linear;
+    color: white;
+}
+
+.file_input{
+    display: none;
+}
+
+.submit_btn{
+    width: 100%;
+    border: 0;
+    outline: 0;
+    padding: 5px 0;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 17px;
+    cursor: pointer;
+    transition: 0.3s all linear;
+}
+
+.submit_btn:hover{
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.models{
+    margin: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.model_img{
+    position: relative;
+    width: 200px;
+    height: 200px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.actions_container{
+    transition: all 0.3s linear;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.action_icon{
+    font-size: 40px;
+    cursor: pointer;
+}
+.edit{
+    color: #c0692c;
+}
+
+.delete{
+    color: hotpink;
+}
+
+.model_img img{
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+
+.model_img:hover .actions_container{
+    opacity: 0.9;
+}
+
+.model_name{
+    text-align: center;
+    padding: 10px 0;
+}
+
+.error{
+    color: crimson;
+    height: 35px;
+    line-height: 35px;
+}
+
+.title{
+    margin: 15px 0;
+}
+
+.preview_container{
+    position: relative
+}
+
+.delete_selected_img{
+    transition: all 0.3s linear;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview_container:hover .delete_selected_img{
+    opacity: 1;
+}
+
+.delete_icon{
+    color: crimson;
+    font-size: 25px;
+}
+
+.preview{
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+    border-radius: 5px;
+}
+
+.upload_img{
+    display: flex;
+    gap: 20px;
+}

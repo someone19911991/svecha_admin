@@ -13,7 +13,8 @@ type selectBrandOptions = {
     [key: string]: string
 }
 
-export const backURL = 'http://localhost:5000'
+// export const backURL = 'http://localhost:5000'
+export const backURL = 'https://www.back.svecha.am/api'
 
 export const brandsArray = [
     'bosch',
@@ -73,7 +74,7 @@ const oemsSchema = {
 
 const MAX_FILE_SIZE = 1024 * 1024
 const validFileExtensions = {
-    img: ['jpg', 'gif', 'png', 'jpeg', 'svg', 'webp'],
+    img: ['jpg', 'gif', 'png', 'jpeg', 'svg', 'webp', 'jfif'],
 }
 
 const imgsSchema = yup
@@ -202,6 +203,63 @@ export const crankshaftCamshaftSensorsSchema = yup.object({
         .mixed()
         .required('Connection Type is required')
         .oneOf(connectionTypeArray, 'Invalid Connection Type'),
+})
+
+interface FormData {
+    image: FileList;
+}
+
+export const createModelSchema = yup.object({
+    name: yup.string().trim().required('Model Name is required'),
+    img: yup
+    .mixed<FileList>()
+    .test('required', 'Img is required', (value) => {
+        return !!value
+    })
+    .test('is-valid-type', 'Invalid file type', (value) => {
+        if (value && typeof value === 'string') {
+            return true
+        }
+        const type = value?.[0]?.type?.split('/')?.pop()
+
+        if (type) {
+            return validFileExtensions.img.includes(type)
+        }
+    })
+    .test('fileSize', 'File size is too large', (value) => {
+        if (value && typeof value === 'string') {
+            return true
+        }
+        return value && value[0].size <= MAX_FILE_SIZE // Maximum file size is 1 MB
+    })
+})
+
+export const updateModelSchema = yup.object({
+    name: yup.string().trim().required('Model Name is required'),
+    img: yup
+        .mixed<FileList>()
+        .test('is-valid-type', 'Invalid file type', (value) => {
+            if(!value){
+                return true
+            }
+            if (value && typeof value === 'string') {
+                return true
+            }
+            const type = value?.[0]?.type?.split('/')?.pop()
+
+            if (type) {
+                return validFileExtensions.img.includes(type)
+            }
+        })
+        .test('fileSize', 'File size is too large', (value) => {
+            if(!value){
+                return true
+            }
+            if (value && typeof value === 'string') {
+                return true
+            }
+            return value && value[0].size <= MAX_FILE_SIZE // Maximum file size is 1 MB
+        })
 })
 
 type schemaType<T> = {
