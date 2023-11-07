@@ -4,6 +4,7 @@ import Product from "./pages/Products/Product";
 import Notifications from "./pages/Notifications/Notifications";
 import Messages from "./pages/Messages/Messages";
 import Models from "./pages/Models/Models";
+import TopSellers from "./pages/TopSellers/TopSellers";
 
 export const routes = [
     { path: '/', element: Main },
@@ -15,6 +16,7 @@ export const routes = [
     { path: '/notifications_history', element: Notifications },
     { path: '/messages_history', element: Messages },
     { path: '/models/', element: Models },
+    { path: '/top-sellers/', element: TopSellers },
     // { path: '/spark_plugs', element: SparkPlugs },
     // { path: '/ignition_coils', element: IgnitionCoils },
     // { path: '/ignition_coil_mouthpieces', element: IgnitionCoilMouthpieces },

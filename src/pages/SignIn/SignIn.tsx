@@ -21,11 +21,11 @@ const schema = yup.object({
 const SignIn = () => {
     const dispatch = useAppDispatch()
     const [notification, setNotification] = useState({type: '', message: ''})
-    const [signIn] = useSignInMutation()
+    const [signIn, {isLoading}] = useSignInMutation()
     const form = useForm<FormValues>({
         defaultValues: {
-            email: '',
-            password: '',
+            email: 'garik.melqonyan91@mail.ru',
+            password: 'another_pass',
         },
         resolver: yupResolver(schema)
     })
@@ -65,7 +65,7 @@ const SignIn = () => {
                         <p className={styles.error}>{errors.password?.message}</p>
                     </div>
                     <div>
-                        <button className={`btn`} type="submit">Submit</button>
+                        <button disabled={isLoading} className={`btn`} type="submit">{isLoading ? 'Loading...' : 'Submit'}</button>
                     </div>
                 </form>
 

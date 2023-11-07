@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import styles from './products.module.css'
-import {useGetProductsQuery, useLazyGetProductsQuery} from '../../features/products/productsApiSlice'
+import {useGetProductsQuery} from '../../features/products/productsApiSlice'
 import { useParams } from 'react-router-dom'
 import Table from '../../components/Table/Table'
 import Loading from '../../components/Loading/Loading'
-import { categoryObj } from '../../consts'
 import { IoIosCreate } from 'react-icons/io'
 import Notification from '../../components/Notification/Notification'
 import Modal from "../../components/Modal/Modal";
-import { IProduct } from '../../interfaces'
 import ProductForm from "../../components/ProductForm/ProductForm";
 
 const Products = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const category = useParams().category as string
     const [notification, setNotification] = useState({ type: '', message: '' })
-    const [products, setProducts] = useState<IProduct[]>([])
-    // const [getProducts, { isSuccess, isLoading }] = useLazyGetProductsQuery()
     const {data: productsData, isSuccess, isLoading, isError, error} = useGetProductsQuery(category)
-    const categoryTitle = categoryObj[category].name
 
     const showNotification = ({type, message}: {type: string, message: string}) => {
         setNotification({type, message})
@@ -29,7 +24,7 @@ const Products = () => {
         if(isError){
             showNotification({ type: 'error', message: JSON.stringify(error) })
         }
-    }, [isError])
+    }, [isError, error])
 
 
     if (isLoading) {

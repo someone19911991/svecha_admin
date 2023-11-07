@@ -1,0 +1,26 @@
+.container{
+    padding: 10px;
+}
+.btns_container{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.btns_container button{
+    padding: 10px;
+    background-color: teal;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid teal;
+    outline: 0;
+    cursor: pointer;
+}
+.btns_container button.active{
+    background-color: white;
+    color: teal;
+}
+
+.chart_container{
+    height: calc(100vh - 300px)
+}

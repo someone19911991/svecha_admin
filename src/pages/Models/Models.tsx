@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import styles from "./models.module.css"
 import {useCreateModelMutation, useGetModelsQuery, useUpdateModelMutation, useDeleteModelMutation} from "../../features/models/modelApiSlice";
 import {FiUpload} from "react-icons/fi"
-import {createModelSchema, updateModelSchema} from "../../consts";
+import {backendURL, createModelSchema, updateModelSchema} from "../../consts";
 import {FieldValues, useForm} from 'react-hook-form'
 import {yupResolver} from "@hookform/resolvers/yup";
 import {MdModeEditOutline} from "react-icons/md"
@@ -15,8 +15,6 @@ interface ModelForm{
 }
 
 type FormValues = FieldValues & ModelForm
-
-const backURL = 'https://www.back.svecha.am'
 
 interface IImgToEdit{
     oldImgName: string, id: string
@@ -40,12 +38,11 @@ const Models = () => {
         watch,
         setValue
     } = form
-    const [name, setName] = useState('')
-    const [img, setImg] = useState<File | null>(null)
+
     const [createModel, {isLoading: createLoading}] = useCreateModelMutation()
     const [updateModel, {isLoading: updateLoading}] = useUpdateModelMutation()
-    const [deleteModel, {error}] = useDeleteModelMutation()
-    const {data: models, isLoading} = useGetModelsQuery()
+    const [deleteModel] = useDeleteModelMutation()
+    const {data: models} = useGetModelsQuery()
 
     const onSubmit = async(data: FormValues) => {
         const formData = new FormData()
@@ -143,7 +140,7 @@ const Models = () => {
                             <MdModeEditOutline onClick={() => handleEditModel(model.id)} className={`${styles.action_icon} ${styles.edit}`}/>
                             <MdDelete onClick={() => handleDeleteModel(model.id)} className={`${styles.action_icon} ${styles.delete}`}/>
                         </div>
-                        <img src={`${backURL}/${model.img}`} alt={model.name}/>
+                        <img src={`${backendURL}/${model.img}`} alt={model.name}/>
                     </div>
                     <p className={styles.model_name}>{model.name}</p>
                 </div>)}

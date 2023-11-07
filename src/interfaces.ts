@@ -45,6 +45,7 @@ export interface IProduct {
     electrode_type?: string
     steering_axle_bore_diameter?: number
     airbag_plugs_number?: number
+    total_count?: number
 }
 
 // Omit<IProductForm, 'product_id' | 'id' | 'category_name' | 'category_id'>

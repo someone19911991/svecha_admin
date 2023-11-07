@@ -12,7 +12,7 @@ const App = () => {
     const dispatch = useAppDispatch()
     const [initialized, setInitialized] = useState(false)
     const { accessToken } = useAppSelector((state) => state.auth)
-    const [refresh, { isSuccess }] = useRefreshMutation()
+    const [refresh] = useRefreshMutation()
     useEffect(() => {
         if (!accessToken) {
             refresh()

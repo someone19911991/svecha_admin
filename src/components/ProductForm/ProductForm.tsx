@@ -1,4 +1,4 @@
-import React, {FC, MouseEvent, useEffect, useMemo, useRef, useState} from 'react'
+import React, {FC, useEffect, useMemo, useState} from 'react'
 import {
     brandsSelect,
     categoriesSelect,
@@ -7,7 +7,6 @@ import {
     electrodesNumberArray,
     keySizeArray,
     seatTypeArray,
-    backURL,
     plugsNumberArray,
     contactsNumberArray,
     required_schema,
@@ -16,7 +15,7 @@ import {
     connectionTypeArray,
     contactNumberArray,
     brandsArray,
-    threadSizeArray,
+    threadSizeArray, backendURL,
 } from '../../consts'
 import { IProduct, IProductForm } from '../../interfaces'
 import { useFieldArray, useForm, FieldValues } from 'react-hook-form'
@@ -31,8 +30,6 @@ import {
 } from '../../features/products/productsApiSlice'
 import noImg from '../../imgs/no_img.png'
 import Notification from '../Notification/Notification'
-import { Simulate } from 'react-dom/test-utils'
-import input = Simulate.input
 import {useParams} from "react-router-dom";
 
 export type FormValues = FieldValues & IProductForm
@@ -44,7 +41,6 @@ interface IProductFormProps {
 }
 
 const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
-    const params = useParams()
     const [refs_, setRefs] = useState<{ [key: string]: Array<string> }>({})
     const [oems_, setOems] = useState<{ [key: string]: Array<string> }>({})
     const [refsToRemove, setRefsToRemove] = useState<{ [key: string]: Array<string> }>({})
@@ -266,8 +262,6 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
     const [brandOptions, setBrandOptions] = useState<JSX.Element[]>([])
     const [categoryOptions, setCategoryOptions] = useState<JSX.Element[]>([])
 
-    const values = getValues()
-
     const showNotification = ({
         type,
         message,
@@ -277,11 +271,6 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
     }) => {
         setNotification({ type, message })
         setTimeout(() => setNotification({ type: '', message: '' }), 5000)
-    }
-
-    const onSubmit_ = async (data: FormValues) => {
-        console.log({refs_, oems_})
-        console.log(data)
     }
 
     const onSubmit = async (data: FormValues) => {
@@ -306,20 +295,23 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                 for(let i in refs_){
                     refs_[i].forEach(ref => refsToPass.push({brand: i, ref_num: ref}))
                 }
-                if(!refsToPass.length){
-                    setError(`refs.0.brand`, { type: 'custom', message: 'At least 1 reference required' })
-                    return
-                }
+
+                // commented to not show that refs are required
+                // if(!refsToPass.length){
+                //     setError(`refs.0.brand`, { type: 'custom', message: 'At least 1 reference required' })
+                //     return
+                // }
                 formData.append('refs', JSON.stringify(refsToPass))
             }else if(i === 'oems'){
                 const oemsToPass: Array<{model: string, oem: string}> = []
                 for(let i in oems_){
                     oems_[i].forEach(oem => oemsToPass.push({model: i, oem}))
                 }
-                if(!oemsToPass.length){
-                    setError(`oems.0.model`, { type: 'custom', message: 'At least 1 oem required' })
-                    return
-                }
+                // commented to not show that oems are required
+                // if(!oemsToPass.length){
+                //     setError(`oems.0.model`, { type: 'custom', message: 'At least 1 oem required' })
+                //     return
+                // }
                 console.log({oemsToPass})
                 formData.append('oems', JSON.stringify(oemsToPass))
             }
@@ -341,7 +333,7 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
 
         try {
             await createProduct(formData).unwrap()
-            // onClose()
+            onClose()
         } catch (err) {
             console.log({ err })
         }
@@ -1364,7 +1356,7 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                                                     previewImgs[index]?.img &&
                                                     typeof previewImgs[index]
                                                         ?.img === 'string'
-                                                        ? `${backURL}/${previewImgs[index]?.img}`
+                                                        ? `${backendURL}/${previewImgs[index]?.img}`
                                                         : previewImgs[index]
                                                               ?.img &&
                                                           typeof previewImgs[

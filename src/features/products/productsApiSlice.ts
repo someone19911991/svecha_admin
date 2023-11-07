@@ -29,6 +29,11 @@ const productsApiSlice = apiSlice.injectEndpoints({
             },
             providesTags: (result) => ['Product'],
         }),
+        getTopSellingProducts: build.query<IProduct[], void>({
+            query: (param) => ({
+                url: `/product/top-sellers`,
+            }),
+        }),
         createProduct: build.mutation<string, FormData>({
             query: (body) => ({
                 url: `/product/${body.get('category_name')}/${
@@ -125,5 +130,6 @@ export const {
     useDeleteProductMutation,
     useDeleteImgMutation,
     useDeleteRefMutation,
-    useDeleteOemMutation
+    useDeleteOemMutation,
+    useGetTopSellingProductsQuery
 } = productsApiSlice

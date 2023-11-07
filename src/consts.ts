@@ -1,5 +1,4 @@
 import * as yup from 'yup'
-import React from 'react'
 
 type categoryOptions = {
     [key: string]: { name: string }
@@ -14,6 +13,7 @@ type selectBrandOptions = {
 }
 
 // export const backURL = 'http://localhost:5000'
+export const backendURL = 'https://www.back.svecha.am'
 export const backURL = 'https://www.back.svecha.am/api'
 
 export const brandsArray = [
@@ -63,13 +63,17 @@ export const categoriesSelect: selectOptions = {
 }
 
 const refsSchema = {
-    ref_num: yup.string().required('Reference number is required'),
-    brand: yup.string().required('Reference Brand is required'),
+    // ref_num: yup.string().required('Reference number is required'),
+    ref_num: yup.string(),
+    // brand: yup.string().required('Reference Brand is required'),
+    brand: yup.string(),
 }
 
 const oemsSchema = {
-    oem: yup.string().required('Oem number is required'),
-    model: yup.string().required('Oem Model is required'),
+    // oem: yup.string().required('Oem number is required'),
+    oem: yup.string(),
+    // model: yup.string().required('Oem Model is required'),
+    model: yup.string(),
 }
 
 const MAX_FILE_SIZE = 1024 * 1024
@@ -120,12 +124,12 @@ const productFormSchema = {
     count_copy: yup.number().required('Count(copy) is required'),
     refs: yup
         .array()
-        .of(yup.object().shape(refsSchema))
-        .required('Must have fields'),
+        .of(yup.object().shape(refsSchema)),
+        // .required('Must have fields'),
     oems: yup
         .array()
-        .of(yup.object().shape(oemsSchema))
-        .required('Must have fields'),
+        .of(yup.object().shape(oemsSchema)),
+        // .required('Must have fields'),
     imgs: imgsSchema,
 }
 
@@ -204,10 +208,6 @@ export const crankshaftCamshaftSensorsSchema = yup.object({
         .required('Connection Type is required')
         .oneOf(connectionTypeArray, 'Invalid Connection Type'),
 })
-
-interface FormData {
-    image: FileList;
-}
 
 export const createModelSchema = yup.object({
     name: yup.string().trim().required('Model Name is required'),
@@ -339,3 +339,4 @@ export const months = [
 ]
 
 export const categoryNames = ['Spark Plugs', 'Ignition Coils', 'Airbag Cables', 'Crankshaft Sensors', 'Camshaft Sensors', 'Ignition Coil Mouthpieces']
+export const categoryLabels = ['spark_plugs', 'ignition_coils', 'airbag_cables', 'crankshaft_sensors', 'camshaft_sensors', 'ignition_coil_mouthpieces']

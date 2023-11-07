@@ -65,3 +65,7 @@ tbody tr:nth-child(odd) td{
     background-color: white;
     border: 1px solid pink;
 }
+
+.pagination_container{
+    padding-left: 10px;
+}

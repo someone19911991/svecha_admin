@@ -8,19 +8,22 @@ import Notification from '../Notification/Notification'
 import { useLazyGetProductQuery } from '../../features/products/productsApiSlice'
 import ProductForm from '../ProductForm/ProductForm'
 import Modal from '../Modal/Modal'
+import Pagination from "../Pagination/Pagination";
 
 interface IProductsPros {
     products: IProduct[]
 }
 
 const Table: FC<IProductsPros> = ({ products }) => {
+    const itemsPerPage = 10
+    const [active, setActive] = useState(1)
+    const [productsToShow, setProductsToShow] = useState<Array<IProduct>>([])
     const [modalOpen, setModalOpen] = useState(false)
     const [notification, setNotification] = useState({ type: '', message: '' })
     const { category_name } = products[0]
     const [
         deleteProduct,
         {
-            isLoading: isDeleteLoading,
             isError: isDeleteError,
             error: deleteError,
         },
@@ -70,13 +73,19 @@ const Table: FC<IProductsPros> = ({ products }) => {
                 message: JSON.stringify(deleteError),
             })
         }
-    }, [isDeleteError])
+    }, [isDeleteError, deleteError])
 
     useEffect(() => {
         if (Object.values(product).length) {
             setModalOpen(true)
         }
     }, [product])
+
+    useEffect(() => {
+        const endIndex = itemsPerPage * active
+        const startIndex = endIndex - itemsPerPage
+        setProductsToShow(products.slice(startIndex, endIndex))
+    }, [active, products])
 
     return (
         <div className={styles.wrapper}>
@@ -161,7 +170,7 @@ const Table: FC<IProductsPros> = ({ products }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {products.map((product) => (
+                    {productsToShow.map((product) => (
                         <tr key={product.product_id}>
                             <td className={styles.brand}>{product.brand}</td>
                             <td>{product.model}</td>
@@ -253,6 +262,9 @@ const Table: FC<IProductsPros> = ({ products }) => {
                     ))}
                 </tbody>
             </table>
+            <div className={styles.pagination_container}>
+                <Pagination active={active} setActive={setActive} itemsCount={products.length} itemsPerPage={itemsPerPage}/>
+            </div>
         </div>
     )
 }
