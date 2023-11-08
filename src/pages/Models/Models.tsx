@@ -36,7 +36,8 @@ const Models = () => {
         reset,
         resetField,
         watch,
-        setValue
+        setValue,
+        clearErrors
     } = form
 
     const [createModel, {isLoading: createLoading}] = useCreateModelMutation()
@@ -77,6 +78,7 @@ const Models = () => {
         if(currentModel){
             setValue('name', currentModel.name)
             setModelToEdit({...modelToEdit, id: `${currentModel.id}`, oldImgName: currentModel.img})
+            clearErrors(['name', 'img'])
         }
 
     }
@@ -95,6 +97,12 @@ const Models = () => {
     const resetImg = () => {
         resetField('img')
         setPreviewImg('')
+    }
+
+    const handleReset = () => {
+        setModelToEdit({id: '', oldImgName: ''})
+        clearErrors(['img', 'name'])
+        reset()
     }
 
     useEffect(() => {
@@ -132,6 +140,7 @@ const Models = () => {
                     <p className={styles.error}>{errors.img && errors.img.message}</p>
                 </div>
                 <button disabled={createLoading || updateLoading} className={styles.submit_btn}>{(createLoading || updateLoading) ? 'Submitting...' : (modelToEdit.id ? 'Update' : 'Create')}</button>
+                {modelToEdit.id && <button className={styles.reset} onClick={handleReset}>Reset to create</button>}
             </form>
             <div className={styles.models}>
                 {models && models.map(model => <div key={model.img} className={styles.model}>

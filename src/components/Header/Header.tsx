@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './header.module.css'
-import userImg from '../../imgs/user.jpg'
+import userImg from '../../imgs/saro.jpg'
 import { IoIosNotificationsOutline } from 'react-icons/io'
 import { MdOutlineMessage } from 'react-icons/md'
 import { AiOutlineLogout } from 'react-icons/ai'
