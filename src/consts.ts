@@ -23,6 +23,7 @@ export const brandsArray = [
     'acdelco',
     'ngk',
     'motorcraft',
+    'other'
 ]
 export const keyTypeArray = ['шестигранник', 'многогранник']
 export const keySizeArray = ['12', '16', '21']
@@ -110,11 +111,16 @@ const imgsSchema = yup
     )
     .min(1, 'Please upload at least one file.')
 
+// @ts-ignore
 const productFormSchema = {
     brand: yup
         .mixed()
         .required('Brand is required')
         .oneOf(brandsArray, 'Invalid brand'),
+    // otherBrandValue: yup.string().when('brand', {is: 'other', then: yup.string().required('Brand is required'), otherwise: yup.string()}),
+    otherBrandValue: yup.string().when('brand', (value, field) => {
+        return value[0] === 'other' ? field.required('Brand is required') : field
+    }),
     model: yup.string().required('Model is required'),
     price_original: yup.number().required('Price Original is required'),
     price_copy: yup.number().required('Price Copy is required'),
@@ -290,38 +296,6 @@ export const categoryObj: categoryOptions = {
     camshaft_sensors: { name: 'Camshaft Sensor' },
 }
 
-export const UserData = [
-    {
-        id: 1,
-        year: 2016,
-        userGain: 80000,
-        userLost: 823,
-    },
-    {
-        id: 2,
-        year: 2017,
-        userGain: 45677,
-        userLost: 345,
-    },
-    {
-        id: 3,
-        year: 2018,
-        userGain: 78888,
-        userLost: 555,
-    },
-    {
-        id: 4,
-        year: 2019,
-        userGain: 90000,
-        userLost: 4555,
-    },
-    {
-        id: 5,
-        year: 2020,
-        userGain: 4300,
-        userLost: 234,
-    },
-]
 
 export const months = [
     'January',

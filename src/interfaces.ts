@@ -13,6 +13,7 @@ export interface IProduct {
     id: number
     product_id: number
     brand: string
+    otherBrandValue: string
     model: string
     price_original: number
     price_copy: number
@@ -51,6 +52,7 @@ export interface IProduct {
 // Omit<IProductForm, 'product_id' | 'id' | 'category_name' | 'category_id'>
 export type IProductForm = {
     brand: string
+    otherBrandValue: string
     model: string
     price_original: number | ''
     price_copy: number | ''

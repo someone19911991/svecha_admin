@@ -53,10 +53,6 @@ const Table: FC<IProductsPros> = ({ products }) => {
         }, 5000)
     }
 
-    const onClose = () => {
-        setNotification({ type: '', message: '' })
-    }
-
     const getSingleProduct = async (param: string) => {
         try {
             const res = await getProduct(param).unwrap()
@@ -92,12 +88,12 @@ const Table: FC<IProductsPros> = ({ products }) => {
             <Notification
                 type={notification.type}
                 message={notification.message}
-                onClose={onClose}
+                onClose={() => setNotification({ type: '', message: '' })}
             />
             <Modal onClose={() => setModalOpen(false)} open={modalOpen}>
                 <ProductForm
                     category={product.category_name}
-                    onClose={onClose}
+                    onClose={() => setModalOpen(false)}
                     product={product}
                 />
             </Modal>

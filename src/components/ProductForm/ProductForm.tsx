@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useMemo, useState} from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import {
     brandsSelect,
     categoriesSelect,
@@ -15,7 +15,8 @@ import {
     connectionTypeArray,
     contactNumberArray,
     brandsArray,
-    threadSizeArray, backendURL,
+    threadSizeArray,
+    backendURL,
 } from '../../consts'
 import { IProduct, IProductForm } from '../../interfaces'
 import { useFieldArray, useForm, FieldValues } from 'react-hook-form'
@@ -30,7 +31,6 @@ import {
 } from '../../features/products/productsApiSlice'
 import noImg from '../../imgs/no_img.png'
 import Notification from '../Notification/Notification'
-import {useParams} from "react-router-dom";
 
 export type FormValues = FieldValues & IProductForm
 
@@ -41,10 +41,15 @@ interface IProductFormProps {
 }
 
 const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
+    const [otherBrand, setOtherBrand] = useState(false)
     const [refs_, setRefs] = useState<{ [key: string]: Array<string> }>({})
     const [oems_, setOems] = useState<{ [key: string]: Array<string> }>({})
-    const [refsToRemove, setRefsToRemove] = useState<{ [key: string]: Array<string> }>({})
-    const [oemsToRemove, setOemsToRemove] = useState<{ [key: string]: Array<string> }>({})
+    const [refsToRemove, setRefsToRemove] = useState<{
+        [key: string]: Array<string>
+    }>({})
+    const [oemsToRemove, setOemsToRemove] = useState<{
+        [key: string]: Array<string>
+    }>({})
     const [deletedImgs, setDeletedImgs] = useState<Array<string>>([])
     const [notification, setNotification] = useState({ type: '', message: '' })
     const [createProduct, { isLoading, isError, error }] =
@@ -53,52 +58,62 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
     const [deleteRefAction] = useDeleteRefMutation()
     const [deleteOemAction] = useDeleteOemMutation()
     const [previewImgs, setPreviewImgs] = useState<Array<any>>([])
-    let refsToSet: [{ref_num: string, brand: string}] = [{ref_num: '', brand: ''}]
-    let oemsToSet: [{model: string, oem: string}] = [{model: '', oem: ''}]
+    let refsToSet: [{ ref_num: string; brand: string }] = [
+        { ref_num: '', brand: '' },
+    ]
+    let oemsToSet: [{ model: string; oem: string }] = [{ model: '', oem: '' }]
 
     useMemo(() => {
-        if(product){
-            type refsOemsType = {[key: string]: string}
-            const refsObject: refsOemsType  = {}
-            const oemsObject: refsOemsType  = {}
-            product.refs.forEach(refItem => {
+        if (product) {
+            type refsOemsType = { [key: string]: string }
+            const refsObject: refsOemsType = {}
+            const oemsObject: refsOemsType = {}
+            product.refs.forEach((refItem) => {
                 refsObject[refItem.brand] = refItem.ref_num
             })
-            if(Object.keys(refsObject).length){
+            if (Object.keys(refsObject).length) {
                 const refBrands = Object.keys(refsObject)
                 const refNums = Object.values(refsObject)
-                refBrands.forEach((brand, index) => refsToSet.push({brand, ref_num: refNums[index]}))
+                refBrands.forEach((brand, index) =>
+                    refsToSet.push({ brand, ref_num: refNums[index] })
+                )
                 refsToSet.splice(0, 1)
             }
 
-            product.oems.forEach(oemItem => {
+            product.oems.forEach((oemItem) => {
                 oemsObject[oemItem.model] = oemItem.oem
             })
-            if(Object.keys(oemsObject).length){
+            if (Object.keys(oemsObject).length) {
                 const oemModels = Object.keys(oemsObject)
                 const oems = Object.values(oemsObject)
-                oemModels.forEach((model, index) => oemsToSet.push({model, oem: oems[index]}))
+                oemModels.forEach((model, index) =>
+                    oemsToSet.push({ model, oem: oems[index] })
+                )
                 oemsToSet.splice(0, 1)
             }
-            return {refsToSet, oemsToSet}
+            return { refsToSet, oemsToSet }
         }
     }, [product])
 
-
-
     const defaultValues = useMemo(() => {
         let defaultValues: IProductForm = {
-            brand: product ? product.brand : '',
+            brand: product ? (!brandsArray.includes(product.brand) ? 'other' : product.brand) : '',
+            otherBrandValue: product ? (!brandsArray.includes(product.brand) ? product.brand : '') : '',
             model: product ? product.model : '',
             detail_number:
-                product && `${product.detail_number}` ? product.detail_number : '',
+                product && `${product.detail_number}`
+                    ? product.detail_number
+                    : '',
             price_original:
                 product && `${product.price_original}`
                     ? product.price_original
                     : '',
             count_original:
-                product && `${product.count_original}` ? product.count_original : 0,
-            count_copy: product && `${product.count_copy}` ? product.count_copy : 0,
+                product && `${product.count_original}`
+                    ? product.count_original
+                    : 0,
+            count_copy:
+                product && `${product.count_copy}` ? product.count_copy : 0,
             price_copy:
                 product && `${product.price_copy}` ? product.price_copy : '',
             discount: product && `${product.discount}` ? product.discount : 0,
@@ -112,7 +127,9 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                 electrode_type: product ? product.electrode_type : '',
                 electrodes_number: product ? product.electrodes_number : '',
                 thread_size:
-                    product && `${product.thread_size}` ? `${product.thread_size}` : '',
+                    product && `${product.thread_size}`
+                        ? `${product.thread_size}`
+                        : '',
                 thread_length:
                     product && `${product.thread_length}`
                         ? product.thread_length
@@ -134,7 +151,9 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                 steering_axle_bore_diameter: product
                     ? product?.steering_axle_bore_diameter
                     : '',
-                airbag_plugs_number: product ? product?.airbag_plugs_number : '',
+                airbag_plugs_number: product
+                    ? product?.airbag_plugs_number
+                    : '',
             }
         } else if (category === 'ignition_coil_mouthpieces') {
             defaultValues = {
@@ -225,7 +244,6 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
     //     }
     // }
 
-
     const form = useForm<FormValues>({
         defaultValues,
         resolver: yupResolver(required_schema[category]),
@@ -284,16 +302,25 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
         const formData = new FormData()
         delete data.ref_brand
 
+        if(otherBrand){
+            data.brand = data.otherBrandValue
+        }
+
+        // @ts-ignore
+        delete data.otherBrandValue
+
         for (let i in data) {
             if (i === 'imgs') {
                 data.imgs.forEach((imgItem) => {
                     if (typeof imgItem.img[0] !== 'string')
                         formData.append('imgs', imgItem.img[0])
                 })
-            }else if(i === 'refs'){
-                const refsToPass: Array<{brand: string, ref_num: string}> = []
-                for(let i in refs_){
-                    refs_[i].forEach(ref => refsToPass.push({brand: i, ref_num: ref}))
+            } else if (i === 'refs') {
+                const refsToPass: Array<{ brand: string; ref_num: string }> = []
+                for (let i in refs_) {
+                    refs_[i].forEach((ref) =>
+                        refsToPass.push({ brand: i, ref_num: ref })
+                    )
                 }
 
                 // commented to not show that refs are required
@@ -302,23 +329,25 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                 //     return
                 // }
                 formData.append('refs', JSON.stringify(refsToPass))
-            }else if(i === 'oems'){
-                const oemsToPass: Array<{model: string, oem: string}> = []
-                for(let i in oems_){
-                    oems_[i].forEach(oem => oemsToPass.push({model: i, oem}))
+            } else if (i === 'oems') {
+                const oemsToPass: Array<{ model: string; oem: string }> = []
+                for (let i in oems_) {
+                    oems_[i].forEach((oem) =>
+                        oemsToPass.push({ model: i, oem })
+                    )
                 }
                 // commented to not show that oems are required
                 // if(!oemsToPass.length){
                 //     setError(`oems.0.model`, { type: 'custom', message: 'At least 1 oem required' })
                 //     return
                 // }
-                console.log({oemsToPass})
+
                 formData.append('oems', JSON.stringify(oemsToPass))
-            }
-            else {
+            } else {
                 formData.append(i, data[i])
             }
         }
+
         formData.append('category_name', category)
         formData.append(
             'category_id',
@@ -360,8 +389,6 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
         setCategoryOptions(categoryOptions_)
         !!product?.imgs.length && setPreviewImgs(product.imgs)
     }, [])
-
-
 
     const removeImgItem = async (imgIndex: number) => {
         let imgToDelete = getValues().imgs.find(
@@ -434,7 +461,6 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
         }
     }
 
-
     const removeOemItem = (type: string, index: number) => {
         if (type === 'ref') {
             // @ts-ignore
@@ -457,7 +483,6 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                     [refBrand]: [...arrayToEdit, refNumValueToAdd],
                 })
             }
-
         } else if (type === 'oem') {
             const oemValueToAdd = values.oems[index].oem.trim()
             const oemModel = values.oems[index].model.trim()
@@ -471,35 +496,42 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
         }
     }
 
-    const prepareToRemove = (type: string, oemRefKey: string, value: string, ) => {
+    const prepareToRemove = (
+        type: string,
+        oemRefKey: string,
+        value: string
+    ) => {
         if (type === 'ref') {
-            let arrayToSet = refsToRemove[oemRefKey] ? refsToRemove[oemRefKey] : []
-            if(refsToRemove?.[oemRefKey]?.includes(value)){
-                arrayToSet = arrayToSet.filter(item => item !== value)
-            }else{
+            let arrayToSet = refsToRemove[oemRefKey]
+                ? refsToRemove[oemRefKey]
+                : []
+            if (refsToRemove?.[oemRefKey]?.includes(value)) {
+                arrayToSet = arrayToSet.filter((item) => item !== value)
+            } else {
                 arrayToSet = [...arrayToSet, value]
             }
             const refsToSet = {
                 ...refsToRemove,
                 [oemRefKey]: arrayToSet,
             }
-            if(!arrayToSet.length){
+            if (!arrayToSet.length) {
                 delete refsToSet[oemRefKey]
             }
             setRefsToRemove(refsToSet)
-
         } else if (type === 'oem') {
-            let arrayToSet = oemsToRemove[oemRefKey] ? oemsToRemove[oemRefKey] : []
-            if(oemsToRemove?.[oemRefKey]?.includes(value)){
-                arrayToSet = arrayToSet.filter(item => item !== value)
-            }else{
+            let arrayToSet = oemsToRemove[oemRefKey]
+                ? oemsToRemove[oemRefKey]
+                : []
+            if (oemsToRemove?.[oemRefKey]?.includes(value)) {
+                arrayToSet = arrayToSet.filter((item) => item !== value)
+            } else {
                 arrayToSet = [...arrayToSet, value]
             }
             const oemsToSet = {
                 ...oemsToRemove,
                 [oemRefKey]: arrayToSet,
             }
-            if(!arrayToSet.length){
+            if (!arrayToSet.length) {
                 delete oemsToSet[oemRefKey]
             }
             setOemsToRemove(oemsToSet)
@@ -507,78 +539,87 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
     }
 
     const clearAll = (type: string) => {
-        if(type === 'ref'){
+        if (type === 'ref') {
             setRefs({})
             setRefsToRemove({})
-        }else if(type === 'oem'){
+        } else if (type === 'oem') {
             setOems({})
             setOemsToRemove({})
         }
     }
 
-    const removePreparedItems = async(type: string) => {
-        try{
-            type refsOemsToStay = {[key: string]: Array<string>}
-            if(type === 'oem'){
-                const oemsToStay: refsOemsToStay = {...oems_}
+    const removePreparedItems = async (type: string) => {
+        try {
+            type refsOemsToStay = { [key: string]: Array<string> }
+            if (type === 'oem') {
+                const oemsToStay: refsOemsToStay = { ...oems_ }
                 const oemsToSend = []
-                for(let i in oemsToRemove){
+                for (let i in oemsToRemove) {
                     const oemsToStayArray: Array<string> = []
-                    const oemsToRemoveI = oemsToRemove[i].map(item => {
+                    const oemsToRemoveI = oemsToRemove[i].map((item) => {
                         let itemArray = item.split('_')
                         itemArray.pop()
                         const itemToPush = itemArray.join('_')
                         return itemToPush
                     })
                     oemsToSend.push(...oemsToRemoveI)
-                    if(product){
-                        await deleteOemAction({oems: oemsToSend, product_id: product.product_id})
+                    if (product) {
+                        await deleteOemAction({
+                            oems: oemsToSend,
+                            product_id: product.product_id,
+                        })
                     }
-                    oems_[i].forEach(oemItem => {
-                        if(!oemsToRemoveI.includes(oemItem)){
+                    oems_[i].forEach((oemItem) => {
+                        if (!oemsToRemoveI.includes(oemItem)) {
                             oemsToStayArray.push(oemItem)
                         }
                     })
                     oemsToStay[i] = oemsToStayArray
-                    if(!oemsToStay[i].length){
+                    if (!oemsToStay[i].length) {
                         delete oemsToStay[i]
                     }
                 }
                 setOems(oemsToStay)
                 setOemsToRemove({})
-            }else if(type === 'ref'){
-                const refsToStay: refsOemsToStay = {...refs_}
+            } else if (type === 'ref') {
+                const refsToStay: refsOemsToStay = { ...refs_ }
                 const refsToSend = []
-                for(let i in refsToRemove){
-                    const trial = refsToRemove[i].reduce((acc: Array<string>, item: string) => {
-                        let itemArr = item.split('_')
-                        itemArr.pop()
-                        const itemToPush = itemArr.join('_')
-                        acc.push(itemToPush)
-                        return acc
-                    }, [])
+                for (let i in refsToRemove) {
+                    const trial = refsToRemove[i].reduce(
+                        (acc: Array<string>, item: string) => {
+                            let itemArr = item.split('_')
+                            itemArr.pop()
+                            const itemToPush = itemArr.join('_')
+                            acc.push(itemToPush)
+                            return acc
+                        },
+                        []
+                    )
                     refsToSend.push(...trial)
                 }
 
-                if(product){
-                    await deleteRefAction({refs: refsToSend, product_id: product.product_id}).unwrap()
+                if (product) {
+                    await deleteRefAction({
+                        refs: refsToSend,
+                        product_id: product.product_id,
+                    }).unwrap()
                 }
 
-                for(let i in refsToRemove){
+                for (let i in refsToRemove) {
                     const refsToStayArray: Array<string> = []
-                    const refsToRemoveI = refsToRemove[i].map(item => {
+                    const refsToRemoveI = refsToRemove[i].map((item) => {
                         let itemArr = item.split('_')
                         itemArr.pop()
                         const itemToPush = itemArr.join('_')
                         return itemToPush
                     })
-                    refs_[i].forEach(oemItem => {
-                        if(!refsToRemoveI.includes(oemItem)){
+                    refs_[i].forEach((oemItem) => {
+                        if (!refsToRemoveI.includes(oemItem)) {
                             refsToStayArray.push(oemItem)
                         }
                     })
                     refsToStay[i] = refsToStayArray
-                    if(!refsToStay[i].length){
+                    if (!refsToStay[i].length) {
                         delete refsToStay[i]
                     }
                 }
@@ -586,14 +627,21 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                 setRefs(refsToStay)
                 setRefsToRemove({})
             }
-        }catch(err){
+        } catch (err) {
             console.log(JSON.stringify(err))
         }
     }
 
-
     useEffect(() => {
         const subscription = watch((value, { name, type }) => {
+            if (name === 'brand') {
+                if (value.brand === 'other') {
+                    setOtherBrand(true)
+                } else {
+                    setOtherBrand(false)
+                }
+            }
+
             if (
                 name?.startsWith('imgs') &&
                 type === 'change' &&
@@ -626,15 +674,18 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
     }, [isError])
 
     useEffect(() => {
-        type refsOemsType = {[key: string]: Array<string>}
-        if(product){
-            const {refs, oems} = product
+        type refsOemsType = { [key: string]: Array<string> }
+        if (product) {
+            const { refs, oems } = product
             const refsToSet: refsOemsType = {}
-            if(refs.length){
-                refs.forEach(ref => {
-                    if(refsToSet[ref.brand]){
-                        refsToSet[ref.brand] = [...refsToSet[ref.brand], ref.ref_num]
-                    }else{
+            if (refs.length) {
+                refs.forEach((ref) => {
+                    if (refsToSet[ref.brand]) {
+                        refsToSet[ref.brand] = [
+                            ...refsToSet[ref.brand],
+                            ref.ref_num,
+                        ]
+                    } else {
                         refsToSet[ref.brand] = [ref.ref_num]
                     }
                 })
@@ -642,15 +693,22 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
             }
 
             const oemsToSet: refsOemsType = {}
-            if(oems.length){
-                oems.forEach(oem => {
-                    if(oemsToSet[oem.model]){
-                        oemsToSet[oem.model] = [...oemsToSet[oem.model], oem.oem]
-                    }else{
+            if (oems.length) {
+                oems.forEach((oem) => {
+                    if (oemsToSet[oem.model]) {
+                        oemsToSet[oem.model] = [
+                            ...oemsToSet[oem.model],
+                            oem.oem,
+                        ]
+                    } else {
                         oemsToSet[oem.model] = [oem.oem]
                     }
                 })
                 setOems(oemsToSet)
+            }
+
+            if(!brandsArray.includes(product.brand)){
+                setOtherBrand(true)
             }
         }
     }, [product])
@@ -677,6 +735,18 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                                 </option>
                             ))}
                         </select>
+                        {otherBrand && (
+                            <div className={styles.otherBrand}>
+                                <input
+                                    type="text"
+                                    placeholder="Brand"
+                                    {...register('otherBrandValue')}
+                                />
+                                <p className={styles.pf_error}>
+                                    {errors.otherBrandValue?.message}
+                                </p>
+                            </div>
+                        )}
                         <p className={styles.pf_error}>
                             {errors.brand?.message}
                         </p>
@@ -1089,62 +1159,85 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                         <div>
                             <div className={styles.refs_oems_container}>
                                 <div>
-                                {refFields.map((oemItem, index) => {
-                                    return (
-                                        <div
-                                            className={styles.ref_oem_row}
-                                            key={`${index}`}
-                                        >
+                                    {refFields.map((oemItem, index) => {
+                                        return (
                                             <div
-                                                className={styles.ref_oem_field}
+                                                className={styles.ref_oem_row}
+                                                key={`${index}`}
                                             >
-                                                <input
-                                                    type="text"
-                                                    placeholder="REF BRAND"
-                                                    {...register(
-                                                        `refs.${index}.brand`
-                                                    )}
-                                                />
-                                                <p className={styles.pf_error}>
-                                                    {
-                                                        errors?.refs?.[index]
-                                                            ?.brand?.message
+                                                <div
+                                                    className={
+                                                        styles.ref_oem_field
                                                     }
-                                                </p>
-                                            </div>
-                                            <div
-                                                className={styles.ref_oem_field}
-                                            >
-                                                <input
-                                                    type="text"
-                                                    placeholder="REF Number"
-                                                    {...register(
-                                                        `refs.${index}.ref_num`
-                                                    )}
-                                                />
-                                                <p className={styles.pf_error}>
-                                                    {
-                                                        errors?.refs?.[index]
-                                                            ?.ref_num?.message
+                                                >
+                                                    <input
+                                                        type="text"
+                                                        placeholder="REF BRAND"
+                                                        {...register(
+                                                            `refs.${index}.brand`
+                                                        )}
+                                                    />
+                                                    <p
+                                                        className={
+                                                            styles.pf_error
+                                                        }
+                                                    >
+                                                        {
+                                                            errors?.refs?.[
+                                                                index
+                                                            ]?.brand?.message
+                                                        }
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    className={
+                                                        styles.ref_oem_field
                                                     }
-                                                </p>
+                                                >
+                                                    <input
+                                                        type="text"
+                                                        placeholder="REF Number"
+                                                        {...register(
+                                                            `refs.${index}.ref_num`
+                                                        )}
+                                                    />
+                                                    <p
+                                                        className={
+                                                            styles.pf_error
+                                                        }
+                                                    >
+                                                        {
+                                                            errors?.refs?.[
+                                                                index
+                                                            ]?.ref_num?.message
+                                                        }
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                        addOemItem('ref', index)
+                                                        clearErrors(
+                                                            'refs.0.brand'
+                                                        )
+                                                    }}
+                                                >
+                                                    ADD
+                                                </button>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                        removeOemItem(
+                                                            'ref',
+                                                            index
+                                                        )
+                                                    }}
+                                                >
+                                                    CANCEL
+                                                </button>
                                             </div>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.preventDefault()
-                                                    addOemItem('ref', index)
-                                                    clearErrors('refs.0.brand')
-                                                }}
-                                            >
-                                                ADD
-                                            </button>
-                                            <button                                                 onClick={(e) => {
-                                                e.preventDefault()
-                                                removeOemItem('ref', index)
-                                            }}>CANCEL</button>
-                                        </div>
-                                    )
-                                })}
+                                        )
+                                    })}
                                     <button
                                         className={`btn_wh ${styles.oem_ref_btn}`}
                                         onClick={(e) => {
@@ -1168,31 +1261,59 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                                                     {refKey}
                                                 </p>
                                                 <div>
-                                                    {keyValues.map((value, index) => (
-                                                        <p
-                                                            onClick={() => prepareToRemove('ref', refKey, `${value}_${index}`)}
-                                                            key={`${value}_${index}`}
-                                                            className={
-                                                                `${styles.oem_ref_value}  ${refsToRemove[refKey]?.includes(`${value}_${index}`) ? styles.to_be_deleted : ''}`
-                                                            }
-                                                        >
-                                                            {value}
-                                                        </p>
-                                                    ))}
+                                                    {keyValues.map(
+                                                        (value, index) => (
+                                                            <p
+                                                                onClick={() =>
+                                                                    prepareToRemove(
+                                                                        'ref',
+                                                                        refKey,
+                                                                        `${value}_${index}`
+                                                                    )
+                                                                }
+                                                                key={`${value}_${index}`}
+                                                                className={`${
+                                                                    styles.oem_ref_value
+                                                                }  ${
+                                                                    refsToRemove[
+                                                                        refKey
+                                                                    ]?.includes(
+                                                                        `${value}_${index}`
+                                                                    )
+                                                                        ? styles.to_be_deleted
+                                                                        : ''
+                                                                }`}
+                                                            >
+                                                                {value}
+                                                            </p>
+                                                        )
+                                                    )}
                                                 </div>
                                             </div>
                                         )
                                     })}
-                                    {!!Object.values(refs_).length && <div className={styles.refs_oems_actions}>
-                                        <button onClick={(e) => {
-                                            e.preventDefault()
-                                            removePreparedItems('ref')
-                                        }}>Remove</button>
-                                        <button onClick={(e) => {
-                                            e.preventDefault()
-                                            clearAll('ref')
-                                        }}>Clear All</button>
-                                    </div>}
+                                    {!!Object.values(refs_).length && (
+                                        <div
+                                            className={styles.refs_oems_actions}
+                                        >
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    removePreparedItems('ref')
+                                                }}
+                                            >
+                                                Remove
+                                            </button>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    clearAll('ref')
+                                                }}
+                                            >
+                                                Clear All
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             {/*<button*/}
@@ -1208,7 +1329,7 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                     </div>
                     <div>
                         <div className={styles.refs_oems_container}>
-                            <div >
+                            <div>
                                 {oemFields.map((oemItem, index) => {
                                     return (
                                         <div
@@ -1258,10 +1379,14 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                                             >
                                                 ADD
                                             </button>
-                                            <button onClick={(e) => {
-                                                e.preventDefault()
-                                                removeOemItem('oem', index)
-                                            }}>Cancel</button>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    removeOemItem('oem', index)
+                                                }}
+                                            >
+                                                Cancel
+                                            </button>
                                         </div>
                                     )
                                 })}
@@ -1280,39 +1405,61 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                                     const keyValues = oems_[oemKey]
                                     return (
                                         <div key={oemKey}>
-                                            <p
-                                                className={
-                                                    styles.oem_ref_title
-                                                }
-                                            >
+                                            <p className={styles.oem_ref_title}>
                                                 {oemKey}
                                             </p>
                                             <div>
-                                                {keyValues.map((value, index) => (
-                                                    <p
-                                                        onClick={() => prepareToRemove('oem', oemKey, `${value}_${index}`)}
-                                                        key={`${value}_${index}`}
-                                                        className={
-                                                            `${styles.oem_ref_value} ${oemsToRemove[oemKey]?.includes(`${value}_${index}`) ? styles.to_be_deleted : ''}`
-                                                        }
-                                                    >
-                                                        {value}
-                                                    </p>
-                                                ))}
+                                                {keyValues.map(
+                                                    (value, index) => (
+                                                        <p
+                                                            onClick={() =>
+                                                                prepareToRemove(
+                                                                    'oem',
+                                                                    oemKey,
+                                                                    `${value}_${index}`
+                                                                )
+                                                            }
+                                                            key={`${value}_${index}`}
+                                                            className={`${
+                                                                styles.oem_ref_value
+                                                            } ${
+                                                                oemsToRemove[
+                                                                    oemKey
+                                                                ]?.includes(
+                                                                    `${value}_${index}`
+                                                                )
+                                                                    ? styles.to_be_deleted
+                                                                    : ''
+                                                            }`}
+                                                        >
+                                                            {value}
+                                                        </p>
+                                                    )
+                                                )}
                                             </div>
                                         </div>
                                     )
                                 })}
-                                {!!Object.values(oems_).length && <div className={styles.refs_oems_actions}>
-                                    <button onClick={(e) => {
-                                        e.preventDefault()
-                                        removePreparedItems('oem')
-                                    }}>Remove</button>
-                                    <button onClick={(e) => {
-                                        e.preventDefault()
-                                        clearAll('oem')
-                                    }}>Clear All</button>
-                                </div>}
+                                {!!Object.values(oems_).length && (
+                                    <div className={styles.refs_oems_actions}>
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                removePreparedItems('oem')
+                                            }}
+                                        >
+                                            Remove
+                                        </button>
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                clearAll('oem')
+                                            }}
+                                        >
+                                            Clear All
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                         {/*<button*/}
@@ -1358,15 +1505,16 @@ const ProductForm: FC<IProductFormProps> = ({ category, onClose, product }) => {
                                                         ?.img === 'string'
                                                         ? `${backendURL}/${previewImgs[index]?.img}`
                                                         : previewImgs[index]
-                                                              ?.img &&
-                                                          typeof previewImgs[
-                                                              index
-                                                          ]?.img !== 'string'
-                                                        ? URL.createObjectURL(
-                                                              previewImgs[index]
-                                                                  ?.img
-                                                          )
-                                                        : noImg
+                                                                ?.img &&
+                                                            typeof previewImgs[
+                                                                index
+                                                            ]?.img !== 'string'
+                                                          ? URL.createObjectURL(
+                                                                previewImgs[
+                                                                    index
+                                                                ]?.img
+                                                            )
+                                                          : noImg
                                                 }
                                                 alt=""
                                             />
