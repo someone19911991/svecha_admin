@@ -26,7 +26,7 @@ export const brandsArray = [
     'other'
 ]
 export const keyTypeArray = ['шестигранник', 'многогранник']
-export const keySizeArray = ['12', '16', '21']
+export const keySizeArray = ['14', '16', '21']
 export const seatTypeArray = ['конический', 'шайбовый']
 export const electrodesNumberArray = ['1', '2', '3', '4']
 export const electrodesTypeArray = ['медь', 'платина', 'иридий']
