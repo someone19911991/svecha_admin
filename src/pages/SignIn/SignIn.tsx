@@ -24,8 +24,8 @@ const SignIn = () => {
     const [signIn, {isLoading}] = useSignInMutation()
     const form = useForm<FormValues>({
         defaultValues: {
-            email: '',
-            password: '',
+            email: 'garik.melqonyan91@mail.ru',
+            password: 'another_pass',
         },
         resolver: yupResolver(schema)
     })

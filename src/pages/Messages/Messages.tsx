@@ -5,6 +5,7 @@ import {
 } from '../../features/order/orderApiSlice'
 import Notification from '../../components/Notification/Notification'
 import styles from '../Notifications/notifications.module.css'
+import { formDate } from '../../consts'
 
 const Messages: FC<{ status: string }> = ({ status }) => {
     const [notification, setNotification] = useState({
@@ -12,7 +13,8 @@ const Messages: FC<{ status: string }> = ({ status }) => {
         message: '',
         open: false,
     })
-    const { data: messages } = useGetMessagesQuery(`/order/messages/${status}`)
+    const { data: messages, isLoading: loadingFetchMessages } =
+        useGetMessagesQuery(`/order/messages/${status}`)
     const [markAsAccepted, { isLoading }] = useAcceptedMutation()
     const [acceptedOrders, setAcceptedOrders] = useState<Array<string>>([])
 
@@ -52,6 +54,7 @@ const Messages: FC<{ status: string }> = ({ status }) => {
         if (confirmation) {
             try {
                 await markAsAccepted({ status, items: acceptedOrders })
+                console.log({ markAsAccepted })
                 setAcceptedOrders([])
             } catch (err) {
                 showNotification({
@@ -60,6 +63,14 @@ const Messages: FC<{ status: string }> = ({ status }) => {
                 })
             }
         }
+    }
+
+    if (loadingFetchMessages) {
+        return (
+            <div className={styles.loadingWrapper}>
+                <div className={styles.loading}></div>
+            </div>
+        )
     }
 
     return (
@@ -81,6 +92,7 @@ const Messages: FC<{ status: string }> = ({ status }) => {
                                 <td>Name</td>
                                 <td>Phone</td>
                                 <td>Message</td>
+                                <td>Date</td>
                                 <td>
                                     {status === 'accepted'
                                         ? 'Delete'
@@ -97,6 +109,9 @@ const Messages: FC<{ status: string }> = ({ status }) => {
                                             <td>{message.phone}</td>
                                             <td className={styles.message}>
                                                 {message.message}
+                                            </td>
+                                            <td>
+                                                {formDate(message.created_at)}
                                             </td>
                                             <td>
                                                 <input

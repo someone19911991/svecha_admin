@@ -314,3 +314,18 @@ export const months = [
 
 export const categoryNames = ['Spark Plugs', 'Ignition Coils', 'Airbag Cables', 'Crankshaft Sensors', 'Camshaft Sensors', 'Ignition Coil Mouthpieces']
 export const categoryLabels = ['spark_plugs', 'ignition_coils', 'airbag_cables', 'crankshaft_sensors', 'camshaft_sensors', 'ignition_coil_mouthpieces']
+
+export const formDate = (date: string) => {
+    const newDate = new Date(date)
+    const year = newDate.getFullYear()
+    let month: number | string = newDate.getMonth() + 1
+    let day: number | string = newDate.getDate()
+    month = month < 10 ? `0${month}` : month
+    day = day < 10 ? `0${day}` : day
+    let hours: number | string  = newDate.getHours()
+    let minutes: number | string  = newDate.getMinutes()
+    hours = hours < 10 ? `0${hours}` : hours
+    minutes = minutes < 10 ? `0${minutes}` : minutes
+
+    return `${day}-${month}-${year} ${hours}:${minutes}`
+}

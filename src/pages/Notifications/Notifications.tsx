@@ -6,6 +6,7 @@ import {
 } from '../../features/order/orderApiSlice'
 import styles from './notifications.module.css'
 import Notification from '../../components/Notification/Notification'
+import {formDate} from "../../consts";
 
 const Notifications: FC<{status: string}> = ({status}) => {
     console.log({status})
@@ -15,7 +16,7 @@ const Notifications: FC<{status: string}> = ({status}) => {
         open: false,
     })
     const [markedPhones, setMarkedPhones] = useState<Array<string>>([])
-    const { data } = useGetNotificationsQuery(`/order/notifications/${status}`)
+    const { data, isLoading: loadingFetchNotifications } = useGetNotificationsQuery(`/order/notifications/${status}`)
     const [orders, setOrders] = useState<{
         [key: string]: Array<IOrderedProduct>
     }>({})
@@ -87,6 +88,14 @@ const Notifications: FC<{status: string}> = ({status}) => {
         }
     }, [data])
 
+    if (loadingFetchNotifications) {
+        return (
+            <div className={styles.loadingWrapper}>
+                <div className={styles.loading}></div>
+            </div>
+        )
+    }
+
     return (
         <div>
             {notification.open && (
@@ -109,6 +118,7 @@ const Notifications: FC<{status: string}> = ({status}) => {
                                 <th>Price</th>
                                 <th>Discount</th>
                                 <th>Sum</th>
+                                <th>Date</th>
                                 <th>Phone</th>
                                 <th>{status === 'sold' ? 'Delete' : 'Mark as sold'}</th>
                             </tr>
@@ -157,6 +167,11 @@ const Notifications: FC<{status: string}> = ({status}) => {
                                                                 <td>
                                                                     {
                                                                         orderItem.sum
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    {
+                                                                        formDate(orderItem.created_at)
                                                                     }
                                                                 </td>
                                                                 {index ===
