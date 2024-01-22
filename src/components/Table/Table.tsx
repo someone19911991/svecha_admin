@@ -8,26 +8,24 @@ import Notification from '../Notification/Notification'
 import { useLazyGetProductQuery } from '../../features/products/productsApiSlice'
 import ProductForm from '../ProductForm/ProductForm'
 import Modal from '../Modal/Modal'
-import Pagination from "../Pagination/Pagination";
+import Pagination from '../Pagination/Pagination'
+import { FaLongArrowAltUp, FaLongArrowAltDown } from 'react-icons/fa'
 
 interface IProductsPros {
     products: IProduct[]
+    sortType: string
+    setSortType: (sortType: string) => void
 }
 
-const Table: FC<IProductsPros> = ({ products }) => {
+const Table: FC<IProductsPros> = ({ products, sortType, setSortType }) => {
     const itemsPerPage = 10
     const [active, setActive] = useState(1)
     const [productsToShow, setProductsToShow] = useState<Array<IProduct>>([])
     const [modalOpen, setModalOpen] = useState(false)
     const [notification, setNotification] = useState({ type: '', message: '' })
-    const { category_name } = products[0]
-    const [
-        deleteProduct,
-        {
-            isError: isDeleteError,
-            error: deleteError,
-        },
-    ] = useDeleteProductMutation()
+    const { category_name } = products?.[0]
+    const [deleteProduct, { isError: isDeleteError, error: deleteError }] =
+        useDeleteProductMutation()
     const [getProduct] = useLazyGetProductQuery()
     const [product, setProduct] = useState<IProduct>({} as IProduct)
 
@@ -83,6 +81,26 @@ const Table: FC<IProductsPros> = ({ products }) => {
         setProductsToShow(products.slice(startIndex, endIndex))
     }, [active, products])
 
+    const handleSortChange = (sortBy: string) => {
+        if (!sortType) {
+            if (sortBy === 'brand') {
+                setSortType('brand_asc')
+            } else if (sortBy === 'model') {
+                setSortType('model_asc')
+            }
+        } else {
+            if (sortBy === 'brand') {
+                setSortType(
+                    sortType === 'brand_asc' ? 'brand_desc' : 'brand_asc'
+                )
+            } else if (sortBy === 'model') {
+                setSortType(
+                    sortType === 'model_asc' ? 'model_desc' : 'model_asc'
+                )
+            }
+        }
+    }
+
     return (
         <div className={styles.wrapper}>
             <Notification
@@ -100,8 +118,40 @@ const Table: FC<IProductsPros> = ({ products }) => {
             <table>
                 <thead>
                     <tr>
-                        <th>Brand</th>
-                        <th>Model</th>
+                        <th onClick={() => handleSortChange('brand')}>
+                            <div className={styles.sortBtn}>
+                                Brand
+                                <span>
+                                    {sortType.startsWith('model') ||
+                                    !sortType ? (
+                                        ''
+                                    ) : sortType === 'brand_asc' ? (
+                                        <FaLongArrowAltUp />
+                                    ) : sortType === 'brand_desc' ? (
+                                        <FaLongArrowAltDown />
+                                    ) : (
+                                        ''
+                                    )}
+                                </span>
+                            </div>
+                        </th>
+                        <th onClick={() => handleSortChange('model')}>
+                            <div className={styles.sortBtn}>
+                                Model
+                                <span>
+                                    {sortType.startsWith('brand') ||
+                                    !sortType ? (
+                                        ''
+                                    ) : sortType === 'model_asc' ? (
+                                        <FaLongArrowAltUp />
+                                    ) : sortType === 'model_desc' ? (
+                                        <FaLongArrowAltDown />
+                                    ) : (
+                                        ''
+                                    )}
+                                </span>
+                            </div>
+                        </th>
                         <th>Detail Num</th>
                         <th>Price Original</th>
                         <th>Price Copy</th>
@@ -259,7 +309,12 @@ const Table: FC<IProductsPros> = ({ products }) => {
                 </tbody>
             </table>
             <div className={styles.pagination_container}>
-                <Pagination active={active} setActive={setActive} itemsCount={products.length} itemsPerPage={itemsPerPage}/>
+                <Pagination
+                    active={active}
+                    setActive={setActive}
+                    itemsCount={products.length}
+                    itemsPerPage={itemsPerPage}
+                />
             </div>
         </div>
     )

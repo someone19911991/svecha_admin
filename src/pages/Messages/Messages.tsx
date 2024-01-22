@@ -54,7 +54,6 @@ const Messages: FC<{ status: string }> = ({ status }) => {
         if (confirmation) {
             try {
                 await markAsAccepted({ status, items: acceptedOrders })
-                console.log({ markAsAccepted })
                 setAcceptedOrders([])
             } catch (err) {
                 showNotification({
