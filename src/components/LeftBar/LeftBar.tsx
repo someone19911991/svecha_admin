@@ -7,7 +7,7 @@ const LeftBar = () => {
     return (
         <div className={styles.leftbar_container}>
             <ul className={styles.leftbar_menu}>
-                <li><NavLink to="/products/categories">Categories</NavLink></li>
+                {/*<li><NavLink to="/products/categories">Categories</NavLink></li>*/}
                 <li><NavLink to="/products/spark_plugs">Spark Plugs</NavLink></li>
                 <li><NavLink to="/products/ignition_coils">Ignition Coils</NavLink></li>
                 <li><NavLink to="/products/ignition_coil_mouthpieces">Ignition Coil Mouthpieces</NavLink></li>
